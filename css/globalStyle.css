@@ -1,0 +1,155 @@
+:root {
+
+    /* Custom Button Styles */
+    --primary-color: #4b3f72; /*primary button color */
+    --primary-dark-color: #3a315a; /* active button color */
+    --secondary-color: #D09D00;
+    --secondary-dark-color: #805F00;
+    --neutral-color: #ffffff; /* text color, neutral button color */
+    --box-shadow: 0px 4px 10px rgba(76, 63, 114, 0.5); /* button hover color */
+
+    /* Input Fields Styles */
+    --border-color: rgb(222, 226, 230);
+}
+
+.bg-primary{
+    background-color: #a092d5 !important;
+}
+
+
+body{
+    height: 100vh;
+    min-width: 360px;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+
+    background-color: #f5f5f5;
+
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+
+    -webkit-font-smoothing: antialiased; /* Enable anti-aliasing */
+    -moz-osx-font-smoothing: grayscale; /* Enable anti-aliasing for Firefox */
+    text-rendering: optimizeLegibility; /* Improve legibility */
+}
+
+/* Primary button */
+.btn-primary {
+    background-color: var(--primary-color) !important;
+    color: var(--neutral-color);
+    border: 0; 
+}
+
+.btn-primary:hover {
+    box-shadow: var(--box-shadow);
+}
+
+.btn-primary:active {
+    background-color: var(--primary-dark-color) !important;
+    color: var(--neutral-color) !important;
+}
+
+/* Secondary button */
+.btn-secondary {
+    background-color: var(--secondary-color) !important;
+    color: var(--neutral-color);
+    border: 0; 
+}
+
+.btn-secondary:hover {
+    box-shadow: var(--box-shadow);
+}
+
+.btn-secondary:active {
+    background-color: var(--secondary-dark-color) !important;
+    color: var(--neutral-color) !important;
+}
+
+
+/* Neutral button */
+.btn-neutral-primary {
+    background-color: var(--neutral-color) !important;
+    color: var(--primary-color);
+    border: 1px solid var(--border-color);
+}
+
+.btn-neutral-primary:hover {
+    background-color: var(--primary-color) !important;
+    color: var(--neutral-color);
+}
+
+.btn-neutral-primary:active {
+    background-color: var(--primary-dark-color) !important;
+    color: var(--neutral-color) !important;
+}
+
+.text-decoration-color{
+    color: #6939F8;
+}
+
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 0;
+    left: 20px;
+    background-color: #4CAF50; /* Green for success */
+    color: white;
+    padding: 15px 25px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification.error {
+    background-color: #f44336; /* Red for errors */
+}
+
+.notification.warning {
+    background-color: #ff9800; /* Orange for warnings */
+}
+
+.notification.info {
+    background-color: #2196F3; /* Blue for info */
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notification-content span {
+    font-size: 16px;
+}
+
+/* Close Button (Optional) */
+.notification-content .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.text-primary{
+    color: #6939F8 !important;
+    font-size: 1rem;
+}
+
+main {
+    padding-top: 80px; /* Adjust based on your header height */
+    height: calc(100vh - 80px); /* Full viewport height minus the header height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    width: 100%; /* Ensure it takes up the full width */
+    scrollbar-width: none;
+}
