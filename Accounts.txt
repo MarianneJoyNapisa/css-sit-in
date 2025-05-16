@@ -1,0 +1,16 @@
+Admin Account
+
+username: admin
+password: admin123
+
+
+User Accounts
+
+username: MJNapisa
+password: 111111
+
+username: AaronMondejar
+password: 111111
+
+username: MarkNapisa
+password: 222222
