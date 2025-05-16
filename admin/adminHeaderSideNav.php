@@ -25,6 +25,16 @@
         $pageTitle = "Sit-In Records";
     } elseif ($currentPage == "adminLabReports.php") {
         $pageTitle = "Lab Reports";
+    } elseif ($currentPage == "adminViewFeedback.php") {
+        $pageTitle = "View Feedback";
+    } elseif ($currentPage == "adminLabResourceMaterials.php") {
+        $pageTitle = "Lab Resources & Materials";
+    } elseif ($currentPage == "adminLabSchedules.php") {
+        $pageTitle = "Lab Schedules";
+    } elseif ($currentPage == "adminLeaderboard.php") {
+        $pageTitle = "Leaderboard";
+    } elseif ($currentPage == "adminReservationReq.php") {
+        $pageTitle = "Reservation Request";
     } else {
         $pageTitle = "Page"; // Default title if not listed
     }
@@ -83,6 +93,26 @@
         <a href="adminViewFeedback.php" class="navItem">
             <i class="bi bi-chat-right-dots-fill"></i>
             <span>View Feedback</span>
+        </a>
+        <a href="adminLabResourceMaterials.php" class="navItem">
+            <i class="bi bi-folder"></i>
+            <span>Lab Resources </span>
+        </a>
+        <a href="adminLabSchedules.php" class="navItem">
+            <i class="bi bi-calendar"></i>
+            <span>Lab Schedules </span>
+        </a>
+        <a href="adminLeaderboard.php" class="navItem">
+            <i class="bi bi-trophy-fill"></i>
+            <span>Leaderboard</span>
+        </a>
+        <a href="adminReservationReq.php" class="navItem">
+            <i class="bi bi-pc-display"></i>
+            <span>Reservation</span>
+        </a>
+        <a href="adminLabManagement.php" class="navItem">
+            <i class="bi bi-pc-display"></i>
+            <span>Lab Management</span>
         </a>
         <a href="../login.php" class="navItem">
             <i class="bi bi-box-arrow-right"></i>

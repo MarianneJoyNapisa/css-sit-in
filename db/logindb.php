@@ -1,7 +1,7 @@
 <?php
 session_start();
 error_reporting(E_ALL);
-header('Content-Type: application/json'); // Ensure JSON response
+header('Content-Type: application/json');
 include '../db/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -14,23 +14,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Prepare SQL statement to prevent SQL injection
-    $stmt = $conn->prepare("SELECT id, password FROM users WHERE username = ?");
+    $stmt = $conn->prepare("SELECT id, password, idno, firstname, lastname, remaining_sessions FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $stmt->store_result();
 
     if ($stmt->num_rows == 1) {
-        $stmt->bind_result($id, $hashed_password);
+        $stmt->bind_result($id, $hashed_password, $id_num, $firstname, $lastname, $remaining_sessions);
         $stmt->fetch();
         
-        // Debugging: Log stored password hash
         error_log("Stored Hash for $username: " . $hashed_password);
         
         if (password_verify($password, $hashed_password)) {
             $_SESSION['user_id'] = $id;
             $_SESSION['username'] = $username;
+            $_SESSION['id_number'] = $id_num ?? '';
+            $_SESSION['firstname'] = $firstname;
+            $_SESSION['lastname'] = $lastname;
+            $_SESSION['remaining_sessions'] = $remaining_sessions;
 
-            // Check if the user is an admin
             if ($username === 'admin') {
                 echo json_encode(["status" => "success", "message" => "Admin login successful!", "redirect" => "admin/adminDashboard.php"]);
             } else {

@@ -87,12 +87,13 @@
                                         <label for="lab" class="form-label">Lab</label>
                                         <select class="form-select" id="lab" name="lab" required>
                                             <option value="" disabled selected>Select Lab</option>
-                                            <option value="544">544</option>
-                                            <option value="542">542</option>
-                                            <option value="530">530</option>
+                                            <option value="517">517</option>
                                             <option value="524">524</option>
                                             <option value="526">526</option>
                                             <option value="528">528</option>
+                                            <option value="530">530</option>
+                                            <option value="542">542</option>
+                                            <option value="544">544</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">

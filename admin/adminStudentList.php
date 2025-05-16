@@ -30,6 +30,14 @@
         .pagination {
             margin-top: 20px;
         }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .action-buttons .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body class="d-flex justify-content-center align-items-center">
@@ -119,6 +127,63 @@
             }
         });
 
+        // Function to reset sessions for a single student
+        function resetStudentSessions(studentId) {
+            if (confirm(`Are you sure you want to reset sessions for student ID ${studentId}?`)) {
+                fetch('../db/reset_sessions.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `student_id=${studentId}`
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(data.message);
+                        fetchStudents(); // Reload the student list after resetting sessions
+                    } else {
+                        throw new Error(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error resetting student sessions:', error);
+                    alert('Error resetting sessions: ' + error.message);
+                });
+            }
+        }
+
+        // Function to handle edit button click
+        function handleEditClick(studentId) {
+            window.location.href = `adminEditStudent.php?id=${studentId}`;
+        }
+
+        // Function to handle delete button click
+        function handleDeleteClick(studentId) {
+            if (confirm(`Are you sure you want to delete student ID ${studentId}?`)) {
+                fetch('../db/delete_student.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `student_id=${studentId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    fetchStudents(); // Reload the student list after deletion
+                })
+                .catch(error => {
+                    console.error('Error deleting student:', error);
+                });
+            }
+        }
+
         // Fetch data from PHP API
         function fetchStudents(page = 1) {
             fetch(`../db/fetch_students.php?page=${page}`)
@@ -133,24 +198,29 @@
                     const studentList = document.getElementById('studentList');
                     studentList.innerHTML = '';
                     students.forEach(student => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = ` 
-                        <td>${student.idno}</td>
-                        <td>${student.full_name}</td> <!-- Updated to full_name -->
-                        <td>${student.yearlvl}</td>
-                        <td>${student.course}</td>
-                        <td>${student.remaining_sessions}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary edit-btn" data-id="${student.idno}">
-                                <i class="bi bi-pencil"></i> Edit
-                            </button>
-                            <button class="btn btn-sm btn-danger delete-btn" data-id="${student.idno}">
-                                <i class="bi bi-trash"></i> Delete
-                            </button>
-                        </td>
-                    `;
-                    studentList.appendChild(row);
-                });
+                        const row = document.createElement('tr');
+                        row.innerHTML = ` 
+                            <td>${student.idno}</td>
+                            <td>${student.full_name}</td>
+                            <td>${student.yearlvl}</td>
+                            <td>${student.course}</td>
+                            <td>${student.remaining_sessions}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-primary" onclick="handleEditClick('${student.idno}')">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="handleDeleteClick('${student.idno}')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-warning" onclick="resetStudentSessions('${student.idno}')">
+                                        <i class="bi bi-arrow-clockwise"></i> Reset
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        studentList.appendChild(row);
+                    });
 
                     // Display pagination
                     const pagination = document.getElementById('pagination');

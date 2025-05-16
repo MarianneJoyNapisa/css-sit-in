@@ -12,24 +12,29 @@ if (!$user_id) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    
+    <!-- Bootstrap CSS and Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="../css/globalStyle.css">
     <link rel="stylesheet" href="../css/header_sidenavStyle.css">
+
     <style>
         .profile-picture {
-            width: 100px; /* Fixed width */
-            height: 100px; /* Fixed height */
-            border-radius: 50%; /* Make it circular */
-            object-fit: cover; /* Ensure the image covers the area without distortion */
-            margin-bottom: 15px; /* Space below the image */
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
         }
 
-        /* Announcement Container */
         .announcement-container {
-            max-height: 300px; /* Adjust based on your design */
-            overflow-y: auto; /* Enable scrolling if content exceeds the height */
-            padding-right: 10px; /* Add some padding for the scrollbar */
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
         }
 
         .announcement-item {
@@ -51,14 +56,26 @@ if (!$user_id) {
             color: #333;
             margin-bottom: 0;
         }
+
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 9999;
+        }
+
+        .toast {
+            min-width: 300px;
+        }
     </style>
-    <title>User Dashboard</title>
 </head>
 <body class="d-flex justify-content-center align-items-center">
     <?php include 'userHeaderSideNav.php'; ?>
-    
     <div id="overlay" class="overlay"></div>
-    
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" id="toastContainer"></div>
+
     <!-- Main Container -->
     <main>
         <div class="container">
@@ -69,9 +86,7 @@ if (!$user_id) {
                     <div class="card shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <h3 class="card-title text-primary">Profile Overview</h3>
-                            <div id="user-details" class="user-details">
-                                <!-- User details will be dynamically populated here -->
-                            </div>
+                            <div id="user-details" class="user-details"></div>
                             <a href="userProfile.php" class="btn btn-primary mt-3">Go to Profile</a>
                         </div>
                     </div>
@@ -83,9 +98,7 @@ if (!$user_id) {
                         <div class="card-body p-4">
                             <h3 class="card-title text-primary">Announcements</h3>
                             <div class="announcement-container">
-                                <div id="announcements-list">
-                                    <!-- Announcements will be dynamically inserted here -->
-                                </div>
+                                <div id="announcements-list"></div>
                             </div>
                         </div>
                     </div>
@@ -110,67 +123,29 @@ if (!$user_id) {
         </div>
     </main>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/sideNav.js"></script>
     <script src="../js/fetchAnnouncement.js"></script>
     <script src="../js/searchStudent.js"></script>
-    
+
     <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Fetch and display user details
         fetchUserDetails();
-
-        // Fetch and display announcements
         fetchAnnouncements();
-
-        // Handle form submission (for posting announcements, if applicable)
-        const announcementForm = document.getElementById('announcementForm');
-        if (announcementForm) {
-            announcementForm.addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent the default form submission
-
-                const formData = new FormData(announcementForm);
-
-                fetch('../db/announcements.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            alert(data.message);
-                            fetchAnnouncements(); // Refresh the announcements list
-                            announcementForm.reset(); // Clear the form
-                        } else {
-                            alert('Error: ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('An error occurred while posting the announcement.');
-                    });
-            });
-        }
+        loadNotifications();
+        setInterval(loadNotifications, 30000);
     });
 
-    // Function to fetch and display user details
     function fetchUserDetails() {
-        fetch("../db/fetch_userdetails.php") // Endpoint to fetch user details
+        fetch("../db/fetch_userdetails.php")
             .then(response => response.json())
             .then(data => {
                 if (data.status === "success") {
                     const userDetails = document.getElementById("user-details");
-
-                    // Construct the middle initial
                     const middleInitial = data.data.middlename ? data.data.middlename.charAt(0) + "." : "";
-
-                    // Construct the full name
                     const fullName = `${data.data.firstname} ${middleInitial} ${data.data.lastname}`;
-
-                    // Construct the profile image URL
                     const profileImage = data.data.image ? `../images/${data.data.image}` : '../images/default_image.png';
-
-                    // Construct the HTML for user details
                     userDetails.innerHTML = `
                         <img src="${profileImage}" alt="Profile Picture" class="profile-picture">
                         <h4 class="mb-2 fs-5">${fullName}</h4>
@@ -183,43 +158,25 @@ if (!$user_id) {
             .catch(error => console.error("Error fetching user details:", error));
     }
 
-    // Function to fetch and display announcements
     function fetchAnnouncements() {
         fetch('../db/announcements.php')
-            .then(response => {
-                console.log('Raw Response:', response); // Log the raw response
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log('Parsed Data:', data); // Log the parsed JSON data
                 if (data.status === 'success') {
                     const announcementsList = document.getElementById('announcements-list');
-                    if (announcementsList) {
-                        announcementsList.innerHTML = ''; // Clear existing content
-
-                        if (data.data.length > 0) {
-                            data.data.forEach(announcement => {
-                                const announcementItem = document.createElement('div');
-                                announcementItem.className = 'announcement-item mb-3';
-
-                                const announcementHeader = document.createElement('h6');
-                                announcementHeader.className = 'text-secondary';
-                                announcementHeader.textContent = `${announcement.author_name} | ${announcement.created_at}`;
-
-                                const announcementContent = document.createElement('p');
-                                announcementContent.textContent = announcement.content;
-
-                                announcementItem.appendChild(announcementHeader);
-                                announcementItem.appendChild(announcementContent);
-                                announcementsList.appendChild(announcementItem);
-                            });
-                        } else {
-                            const noAnnouncements = document.createElement('p');
-                            noAnnouncements.textContent = 'No announcements found.';
-                            announcementsList.appendChild(noAnnouncements);
-                        }
+                    announcementsList.innerHTML = '';
+                    if (data.data.length > 0) {
+                        data.data.forEach(announcement => {
+                            const announcementItem = document.createElement('div');
+                            announcementItem.className = 'announcement-item mb-3';
+                            announcementItem.innerHTML = `
+                                <h6 class="text-secondary">${announcement.author_name} | ${announcement.created_at}</h6>
+                                <p>${announcement.content}</p>
+                            `;
+                            announcementsList.appendChild(announcementItem);
+                        });
                     } else {
-                        console.error('Element with id "announcements-list" not found.');
+                        announcementsList.innerHTML = '<p>No announcements found.</p>';
                     }
                 } else {
                     alert('Error fetching announcements: ' + data.message);
@@ -227,8 +184,49 @@ if (!$user_id) {
             })
             .catch(error => {
                 console.error('Error fetching announcements:', error);
-                alert('An error occurred while fetching announcements.');
             });
+    }
+
+function loadNotifications() {
+    fetch('../db/fetch_notif.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status !== 'success' || data.data.length === 0) return;
+
+            const latest = data.data[0]; // get only the most recent notification
+            const toastContainer = document.getElementById("toastContainer");
+            toastContainer.innerHTML = ''; // clear previous toast
+
+            const toastEl = document.createElement('div');
+            toastEl.className = `toast align-items-center text-white ${getToastClass(latest.message)} border-0 mb-2`;
+            toastEl.setAttribute('role', 'alert');
+            toastEl.setAttribute('aria-live', 'assertive');
+            toastEl.setAttribute('aria-atomic', 'true');
+
+            toastEl.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        🔔 ${latest.message}<br>
+                        <small>${new Date(latest.created_at).toLocaleString()}</small>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+
+            toastContainer.appendChild(toastEl);
+            const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+            toast.show();
+        })
+        .catch(error => {
+            console.error('Error fetching notifications:', error);
+        });
+}
+
+    function getToastClass(message) {
+        const msg = message.toLowerCase();
+        if (msg.includes('denied')) return 'bg-danger';
+        if (msg.includes('approved')) return 'bg-success';
+        return 'bg-info';
     }
     </script>
 </body>

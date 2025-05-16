@@ -1,0 +1,22 @@
+2025-05-09 01:06:32 - Database connected successfully
+2025-05-09 01:06:32 - Received input: Array
+(
+    [reservation_id] => 12
+    [status] => approved
+)
+
+2025-05-09 01:06:32 - Transaction started
+2025-05-09 01:06:32 - Reservation found: 12
+2025-05-09 01:06:32 - Reservation status updated to approved
+2025-05-09 01:06:35 - Database connected successfully
+2025-05-09 01:06:35 - Received input: Array
+(
+    [reservation_id] => 12
+    [status] => approved
+)
+
+2025-05-09 01:06:35 - Transaction started
+2025-05-09 01:06:35 - Reservation found: 12
+2025-05-09 01:06:35 - Reservation status updated to approved
+2025-05-09 01:07:09 - Database connected successfully
+2025-05-09 01:07:09 - ERROR: Invalid JSON input

@@ -19,6 +19,16 @@
         $pageTitle = "Sit-In Rules";
     } elseif ($currentPage == "userSitInHistory.php") {
         $pageTitle = "Sit-In History";
+    } elseif ($currentPage == "userLabResourceMaterials.php") {
+        $pageTitle = "Sit-In History";
+    } elseif ($currentPage == "userLabSchedules.php") {
+        $pageTitle = "Lab Schedules";
+    } elseif ($currentPage == "userLeaderboard.php") {
+        $pageTitle = "Leaderboard";
+    } elseif ($currentPage == "userReservation.php") {
+        $pageTitle = "Seat Reservation";
+    } elseif ($currentPage == "userNotifications.php") {
+        $pageTitle = "Notifications";
     } else {
         $pageTitle = "Page"; // Default title if not listed
     }
@@ -40,7 +50,9 @@
         <i class="bi bi-list fs-4 p-2"></i>
     </button>
     <h3 class="m-0"><?php echo $pageTitle; ?></h3>
-    <i class="bi bi-bell fs-4 p-2"></i>
+    <a href="userNotifications.php" class="text-white">
+        <i class="bi bi-bell fs-4 p-2"></i>
+    </a>
 </div>
 
 <!-- Sidebar -->
@@ -73,6 +85,22 @@
         <a href="userLabRules.php" class="navItem">
             <i class="bi bi-file-earmark-text-fill"></i>
             <span>Lab Rules</span>
+        </a>
+        <a href="userLabResourceMaterials.php" class="navItem">
+            <i class="bi bi-folder"></i>
+            <span>Lab Resources </span>
+        </a>
+        <a href="userLabSchedules.php" class="navItem">
+            <i class="bi bi-calendar"></i>
+            <span>Lab Schedules </span>
+        </a>
+        <a href="userLeaderboard.php" class="navItem">
+            <i class="bi bi-trophy-fill"></i>
+            <span>Leaderboard</span>
+        </a>
+        <a href="userReservation.php" class="navItem">
+            <i class="bi bi-pc-display"></i>
+            <span>Reservation</span>
         </a>
         <a href="../login.php" class="navItem">
             <i class="bi bi-box-arrow-right"></i>

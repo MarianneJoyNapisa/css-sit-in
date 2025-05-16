@@ -47,8 +47,8 @@
                         <div id="usernameFields">
                             <label class="form-label">Username</label>
                             <input type="text" id="username" name="username" placeholder="Enter your username" class="form-control" autocomplete="off">        
-                            <div id="usernameError" class="invalid-feedback"></div>
                         </div>
+                        <div id="usernameError" class="invalid-feedback"></div>
                         
                         <!--password -->
                         <div id="passwordFields">
